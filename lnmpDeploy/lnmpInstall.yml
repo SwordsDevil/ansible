@@ -1,0 +1,57 @@
+---
+- hosts: phpserver
+  remote_user: root
+  vars: 
+    nginx_name: www.cwb.com
+    nginx_port: 80
+    mysql_root_password: (Swords..0908)
+    mysql_user_name: Swords
+    mysql_user_password: (Swords..0807)
+    mysql_ips: localhost
+  tasks:
+    - name: transfer lnmp.repo to remote yum
+      copy:
+        src: ./lnmp.repo
+        dest: /etc/yum.repos.d/lnmp.repo
+    
+    - name: install epel
+      yum: 
+        name: epel-release
+        state: latest
+
+    - name: install softerware
+      yum:
+        name: ['nginx','mysql-community-server','php','php-fpm','php-xml','php-gd','php-mysql','php-devel','php-mbstring','php-mcrypt']
+        state: latest
+
+    - name: transfer nginx config to remote nginx
+      template: 
+        src: ./nginxconfig.j2
+        dest: /etc/nginx/conf.d/default.conf
+      notify: start nginx service
+
+    - name: transfer mysql initPd
+      template: 
+        src: ./initPassword.j2
+        dest: /opt/initPd.j2
+
+    - name: execute initPd.j2
+      shell: bash /opt/initPd.j2
+
+    - name: transfer index.php to remote
+      template: 
+        src: ./index.j2
+        dest: /usr/share/nginx/html/index.php
+
+    - name: start php service
+      service: 
+        name: php-fpm
+        state: started
+        enabled: true    
+
+  handlers:
+    - name: start nginx service
+      service: 
+        name: nginx
+        state: started
+        enabled: true
