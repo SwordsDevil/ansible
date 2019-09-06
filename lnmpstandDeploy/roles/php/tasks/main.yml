@@ -1,0 +1,21 @@
+---
+- name: tansfer php73.repo to remote machine
+  template: 
+    src: php73.repo
+    dest: /etc/yum.repos.d/php73.repo
+
+- name: transfer epel.repo to remote machine
+  template: 
+    src: epel.repo
+    dest: /etc/yum.repos.d/epel.repo
+
+- name: install php server
+  yum: 
+    name: ['php','php-fpm','php-xml','php-gd','php-mysql','php-mbstring','php-mcrypt','php-devel']
+    state: latest
+
+- name: transfer index.php to remote machine
+  template: 
+    src: index.j2
+    dest: /usr/share/nginx/html/index.php
+  notify: start php-fpm service

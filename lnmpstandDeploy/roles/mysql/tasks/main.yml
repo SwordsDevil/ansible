@@ -1,0 +1,20 @@
+---
+- name: transfer mysql.repo to remote machine
+  template: 
+    src: mysql.repo
+    dest: /etc/yum.repos.d/mysql.repo
+
+- name: install mysql-community-server 
+  yum: 
+    name: ['MySQL-python','mysql-community-server']
+    state: latest
+  notify: start mysql service
+
+- name: transfer initPsd.sh to remote machine
+  template: 
+    src: initpsd.j2
+    dest: /opt/initpsd.sh
+
+- name: execute initpsd.sh
+  shell: bash /opt/initpsd.sh
+

@@ -1,0 +1,12 @@
+[mysqld]
+datadir=/var/lib/mysql
+socket=/var/lib/mysql/mysql.sock
+symbolic-links=0
+log-error=/var/log/mysqld.log
+pid-file=/var/run/mysqld/mysqld.pid
+server_id = {{ ansible_default_ipv4.get('address').split('.')[-1] }}
+relay_log = /var/log/relay-bin.log
+gtid-mode = ON
+enforce-gtid-consistency = ON
+master_info_repository=TABLE
+relay_log_info_repository=TABLE

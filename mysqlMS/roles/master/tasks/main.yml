@@ -1,0 +1,35 @@
+---
+- name: transfer mysql.repo to remote machine
+  template: 
+    src: mysql.repo
+    dest: /etc/yum.repos.d/mysql.repo
+
+- name: install mysql service 
+  yum: 
+    name: ['MySQL-python','mysql-community-server']
+    state: latest
+
+- name: tansfer my.cnf to remote service
+  template:
+    src: mycnf.j2
+    dest: /etc/my.cnf
+  notify: 
+    - start mysql service
+
+- name: transfer initPsd.sh to remote machine
+  template: 
+    src: initpsd.j2
+    dest: /opt/initpsd.sh
+
+- name: execute initpsd.sh
+  shell: bash /opt/initpsd.sh
+
+- name: create replication user
+  mysql_user:
+    login_user: root
+    login_password: "{{ mysql_root_password}}"
+    user: "{{mysql_user_name }}"
+    host: "{{ mysql_slave_host }}"
+    password: "{{ mysql_user_password }}"
+    priv: "*.*:REPLICATION CLIENT"
+    state: present

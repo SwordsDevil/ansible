@@ -1,0 +1,18 @@
+---
+- name: depoly nginx service
+  hosts: nginx
+  remote_user: root
+  roles:
+    - nginx
+
+- name: depoly php service
+  hosts: php
+  remote_user: root
+  roles:
+    - php
+
+- name: depoly mysql service
+  hosts: mysql
+  remote_user: root
+  roles:
+    - mysql

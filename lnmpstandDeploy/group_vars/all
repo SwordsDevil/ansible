@@ -1,0 +1,9 @@
+---
+nginx_port: 80
+nginx_name: www.chen.com
+mysql_root_password: (Swords..0908)
+mysql_user_name: Swords
+mysql_user_password: (Swords..0807)
+mysql_database_name: project
+mysql_host: 192.168.40.142
+mysql_grant_ip: 192.168.40.141

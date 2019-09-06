@@ -1,0 +1,12 @@
+---
+- name: deploy master mysql
+  hosts: masters
+  remote_user: root
+  roles:
+    - master
+
+- name: deploy slave mysql
+  hosts: slaves
+  remote_user: root
+  roles:
+    - slave
