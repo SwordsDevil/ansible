@@ -1,0 +1,6 @@
+---
+user_name: blog
+user_password: (Swords..0908)
+mysql_db: blog
+mysql_root_password: (Swords..0908)
+host: localhost

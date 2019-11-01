@@ -1,0 +1,16 @@
+#/usr/bin/env bash
+#
+#author: SwordsDevil
+#date: 2019/11/01
+
+ps aux | grep mysql | grep -v grep
+if [ $? -ne 0 ];then
+  mysqlctl start
+fi
+
+sleep 10
+
+initPsd=$(grep "temporary password" /var/log/mysqld.log | awk '{ print $NF }')
+ROOTP="{{ mysql_root_password }}"
+
+mysql --connect-expired-password -uroot -p"${initPsd}" -e "alter user root@localhost identified by '${ROOTP}';" &>/dev/null

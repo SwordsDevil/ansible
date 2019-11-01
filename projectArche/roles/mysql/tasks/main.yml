@@ -1,0 +1,33 @@
+---
+- name: transfer mysql auto install tar package
+  template: src=mysql-auto-install.tar.gz dest=/opt/
+
+- name: tar mysql package
+  shell: tar xf /opt/mysql-auto-install.tar.gz -C /usr/local
+
+- name: execute mysql install sh scripts
+  shell: bash  /usr/local/mysqld/install.sh
+
+- name: transfer change password sh
+  template: src=chpd.j2 dest=/opt/
+
+- name: execute chpd sh
+  shell: source /etc/profile; bash /opt/chpd.sh
+
+- name: create mysql user and grant 
+  mysql_user: 
+    login_user: root
+    login_password: "{{ mysql_root_password}}"
+    user: "{{ user_name }}"
+    host: "{{ host }}"
+    password: "{{ user_password }}"
+    priv: "*.*:ALL,GRANT"
+    state: present
+
+- name: create mysql database
+  mysql_db: 
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    name: "{{ mysql_db }}"
+    state: present
+
