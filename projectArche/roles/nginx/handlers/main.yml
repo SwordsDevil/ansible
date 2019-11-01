@@ -1,3 +1,0 @@
----
-- name: start nginx service
-  shell: /usr/local/nginx/sbin/nginx
